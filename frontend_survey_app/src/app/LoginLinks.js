@@ -12,7 +12,7 @@ const LoginLinks = () => {
                 <Link
                     href="/dashboard"
                     className="ml-4 text-sm text-gray-700 underline">
-                    Dashboard
+                    Admin Dashboard
                 </Link>
             ) : (
                 <>

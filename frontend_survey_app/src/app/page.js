@@ -14,6 +14,7 @@ import {
     Select,
     FormControl,
     InputLabel,
+    Alert,
 } from '@mui/material'
 import axios from '@/lib/axios'
 import Link from 'next/link'
@@ -26,6 +27,7 @@ const Home = () => {
     const [responses, setResponses] = useState({})
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
 
     useEffect(() => {
         const fetchSurveys = async () => {
@@ -81,11 +83,11 @@ const Home = () => {
             await axios.post(`/api/surveys/${survey.id}/responses`, {
                 responses,
             })
-            alert('Survey response submitted successfully!')
+            setSuccess('Survey response submitted successfully!')
             setResponses({})
         } catch (error) {
             console.error('Failed to submit survey response:', error)
-            alert('Failed to submit survey response.')
+            setError('Failed to submit survey response.')
         }
     }
 
@@ -95,6 +97,16 @@ const Home = () => {
                 <LoginLinks />
 
                 <Container maxWidth="sm">
+                    {error && (
+                        <Alert severity="error" sx={{ mb: 2 }}>
+                            {error}
+                        </Alert>
+                    )}
+                    {success && (
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                            {success}
+                        </Alert>
+                    )}
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Select Survey</InputLabel>
                         <Select
@@ -115,11 +127,7 @@ const Home = () => {
                     {loading && (
                         <Typography variant="h6">Loading...</Typography>
                     )}
-                    {error && (
-                        <Typography variant="h6" color="error" gutterBottom>
-                            {error}
-                        </Typography>
-                    )}
+
                     {!loading && !error && survey && (
                         <>
                             <Typography

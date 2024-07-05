@@ -14,6 +14,7 @@ import {
     IconButton,
     Card,
     CardContent,
+    Alert,
 } from '@mui/material'
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material'
 import axios from '@/lib/axios'
@@ -23,6 +24,8 @@ const Dashboard = () => {
     const [title, setTitle] = useState('')
     const [questions, setQuestions] = useState([{ question: '', type: 'text' }])
     const [allSurveyResults, setAllSurveyResults] = useState(null)
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
     const chartRef = useRef(null)
 
     const handleQuestionChange = (index, field, value) => {
@@ -47,12 +50,12 @@ const Dashboard = () => {
                 title,
                 questions,
             })
-            alert('Survey created successfully!')
+            setSuccess('Survey created successfully!')
             setTitle('')
             setQuestions([{ question: '', type: 'text' }])
         } catch (error) {
             console.error('Failed to create survey:', error)
-            alert('Failed to create survey.')
+            setError('Failed to create survey.')
         }
     }
 
@@ -60,7 +63,7 @@ const Dashboard = () => {
         const fetchAllSurveyResults = async () => {
             try {
                 const response = await axios.get('/api/surveys/result/all')
-                console.log('All Survey Results:', response.data) // Log the structure of the survey results
+
                 setAllSurveyResults(response.data)
             } catch (error) {
                 console.error('Failed to fetch all survey results:', error)
@@ -128,7 +131,6 @@ const Dashboard = () => {
             })
         }
     }, [allSurveyResults])
-
     const renderTextResponses = () => {
         if (!allSurveyResults) return null
         return allSurveyResults.flatMap(survey =>
@@ -162,6 +164,16 @@ const Dashboard = () => {
             <Typography variant="h4" component="h1" gutterBottom>
                 Create New Survey
             </Typography>
+            {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                </Alert>
+            )}
+            {success && (
+                <Alert severity="success" sx={{ mb: 2 }}>
+                    {success}
+                </Alert>
+            )}
             <form onSubmit={handleSubmit}>
                 <Box mb={2}>
                     <TextField
