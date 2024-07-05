@@ -161,7 +161,7 @@ const Dashboard = () => {
 
     return (
         <Container maxWidth="md">
-            <Typography variant="h4" component="h1" gutterBottom>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 2 }}>
                 Create New Survey
             </Typography>
             {error && (
